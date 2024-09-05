@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Recipe Finder</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Vertical Navbar */
+        nav {
+            background-color: #333;
+            width: 200px;
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            padding: 20px;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+        }
+
+        nav ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        nav li {
+            margin: 15px 0;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-size: 1.2em;
+            display: block;
+            padding: 10px;
+        }
+
+        nav a:hover {
+            text-decoration: underline;
+            background-color: #555;
+        }
+
+        /* Main Content */
+        .content {
+            margin-left: 220px; /* Space for the navbar */
+            padding: 20px;
+            width: calc(100% - 220px); /* Adjust width based on navbar width */
+        }
+
+        /* Container Styles */
+        .container {
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Heading */
+        h1, h2, h3, h4, h5 {
+            color: #800000; /* Dark red color */
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 2em;
+        }
+
+        /* Card Styles */
+        .card {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Form Styles */
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        label {
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        button {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+
+        input::placeholder {
+            color: #aaa;
+            font-size: 14px;
+        }
+
+        input[type="text"]:focus,
+        input[type="number"]:focus {
+            border-color: #007bff;
+            outline: none;
+        }
+
+        button {
+            background-color: #007bff;
+            color: #ffffff;
+            border: none;
+            cursor: pointer;
+            font-size: 18px;
+            padding: 14px;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        /* Table Styles */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th,
+        td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #007bff;
+            color: #ffffff;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .content {
+                margin-left: 0;
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <ul>
+            <li><a href="{% url 'home' %}">Home</a></li>
+            <li><a href="{% url 'search' %}">Search</a></li>
+            <li><a href="{% url 'chatbot' %}">Chat with AI</a></li>
+        </ul>
+    </nav>
+    <div class="content">
+        <div class="card">
+            <h3 color="red" align="center">Find Ingredients of your favourite dish</h3>
+            <form method="post">
+                {% csrf_token %}
+                <label for="recipe">Recipe:</label>
+                <input type="text" id="recipe" name="recipe">
+
+                <label for="min_cooking_time">Min Cooking Time (minutes):</label>
+                <input type="number" id="min_cooking_time" name="min_cooking_time">
+
+                <label for="max_cooking_time">Max Cooking Time (minutes):</label>
+                <input type="number" id="max_cooking_time" name="max_cooking_time">
+
+                <label for="preference">Preference:</label>
+                <input type="text" id="preference" name="preference">
+
+                <label for="food_type">Food Type:</label>
+                <input type="text" id="food_type" name="food_type">
+
+                <button type="submit">Find</button>
+            </form>
+
+            <h2>Results:</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Recipe</th>
+                        <th>Cooking Time</th>
+                        <th>Preference</th>
+                        <th>Food Type</th>
+                        <th>Ingredients</th>
+                        <th>Instructions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for recipe in recipes %}
+                    <tr>
+                        <td>{{ recipe.recipe }}</td>
+                        <td>{{ recipe.cooking_time }}</td>
+                        <td>{{ recipe.preference }}</td>
+                        <td>{{ recipe.food_type }}</td>
+                        <td>{{ recipe.ingredients }}</td>
+                        <td>{{ recipe.instructions }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="5">No recipes found.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>

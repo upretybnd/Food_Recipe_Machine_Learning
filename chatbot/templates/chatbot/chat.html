@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chatbot</title>
+    <style>
+           /* Vertical Navbar */
+        nav {
+            background-color: #333;
+            width: 200px;
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            padding: 20px;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+        }
+
+        nav ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        nav li {
+            margin: 15px 0;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-size: 1.2em;
+            display: block;
+            padding: 10px;
+        }
+
+        nav a:hover {
+            text-decoration: underline;
+            background-color: #555;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+         .input-area {
+            padding: 10px;
+            background-color: #ffffff;
+            border-bottom: 1px solid #ddd;
+            border-radius: 10px;
+            display: flex;
+            width: 100%;
+            position: fixed;
+            top: 60px; /* Adjust this to the height of your navbar */
+            left: 0;
+            right: 0;
+            z-index: 10;
+            max-width: 100%;
+        }
+
+        .user-input {
+            flex-grow: 1;
+            padding: 12px; /* Slightly increased padding for better user experience */
+            border: 1px solid #ccc; /* Added border to make the input box more distinct */
+            border-radius: 20px;
+            margin-right: 10px;
+            outline: none;
+            font-size: 1.1em;
+            background-color: #ffffff;
+            color: #333; /* Darker text color for better readability */
+        }
+
+        .user-input::placeholder {
+            color: #888; /* Lighter color for better contrast */
+            font-size: 1.1em; /* Increased font size */
+        }
+
+        .submit-btn {
+            background-color: #25D366;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .submit-btn:hover {
+            background-color: #128C7E;
+        }
+
+        /* Main content styling */
+        .content {
+            padding: 20px;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #ededed;
+            flex-grow: 1;
+            margin-top: 80px; /* Space for the input area */
+            overflow-y: auto;
+        }
+
+        .card {
+            background-color: white;
+            width: 100%;
+            max-width: 600px;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Chatbox styling */
+        .chatbox {
+            flex-grow: 1;
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .messages {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .message {
+            max-width: 75%;
+            padding: 10px;
+            border-radius: 10px;
+            line-height: 1.5;
+            word-wrap: break-word;
+        }
+
+        .message.user {
+            align-self: flex-end;
+            background-color: #DCF8C6;
+        }
+
+        .message.bot {
+            align-self: flex-start;
+            background-color: #ECE5DD;
+        }
+        .content {
+                margin-top: 20px;
+
+        /* Media query for responsiveness */
+        @media (max-width: 768px) {
+            .input-area {
+                flex-direction: column;
+                position: static;
+                max-width: 100%;
+                margin: 10px auto;
+                top: auto;
+            }
+
+            .user-input {
+                margin-bottom: 10px;
+                border-radius: 10px;
+            }
+
+            .submit-btn {
+                width: 100%;
+                border-radius: 10px;
+            }
+
+            .content {
+                margin-top: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+<nav>
+        <ul>
+            <li><a href="{% url 'home' %}">Home</a></li>
+            <li><a href="{% url 'search' %}">Search</a></li>
+            <li><a href="{% url 'chatbot' %}">Chat with AI</a></li>
+        </ul>
+    </nav>
+    <div class="content">
+        <div class="card">
+    <div class="chatbox">
+        <div class="messages">
+            {% if response %}
+                <p><strong>Bot:</strong> {{ response }}</p>
+            {% endif %}
+        </div>
+        <form method="post">
+            {% csrf_token %}
+            <input type="text" name="user_input" class="user-input" placeholder="Type your message here..." required>
+            <button type="submit" class="submit-btn">Send</button>
+        </form>
+    </div>
+        </div>
+    </div>
+</body>
+</html>
